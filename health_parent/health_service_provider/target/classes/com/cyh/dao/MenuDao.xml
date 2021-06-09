@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cyh.dao.MenuDao">
+
+    <resultMap id="baseResultMap" type="com.cyh.pojo.Menu">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="linkUrl" column="linkUrl" />
+        <result property="path" column="path" />
+        <result property="priority" column="priority" />
+        <result property="description" column="description" />
+        <result property="icon" column="icon" />
+        <collection property="children"
+                    javaType="ArrayList"
+                    ofType="com.cyh.pojo.Menu"
+                    column="id"
+                    select="com.cyh.dao.MenuDao.selectByParentId"
+        />
+
+
+    </resultMap>
+
+    <select id="selectByRoleId" resultMap="baseResultMap" parameterType="Integer">
+        select * from t_menu
+        where id in
+        (select menu_id from t_role_menu where role_id = #{roleId} )
+               and parentMenuId is null
+    </select>
+
+    <select id="selectByParentId" resultType="com.cyh.pojo.Menu" parameterType="Integer">
+        select * from t_menu where parentMenuId = #{parentId}
+    </select>
+    
+</mapper>

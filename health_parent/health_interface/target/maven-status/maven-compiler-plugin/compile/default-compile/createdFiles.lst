@@ -1,0 +1,11 @@
+com\cyh\service\OrderSettingService.class
+com\cyh\service\ReportService.class
+com\cyh\service\RoleService.class
+com\cyh\service\CheckGroupService.class
+com\cyh\service\SetmealService.class
+com\cyh\service\OrderService.class
+com\cyh\service\MenuService.class
+com\cyh\service\CheckItemService.class
+com\cyh\service\MemberService.class
+com\cyh\service\PermissionService.class
+com\cyh\service\UserService.class

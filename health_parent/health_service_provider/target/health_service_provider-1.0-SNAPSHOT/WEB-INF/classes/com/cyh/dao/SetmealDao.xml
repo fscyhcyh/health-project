@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cyh.dao.SetmealDao">
+    <resultMap id="baseResultMap" type="com.cyh.pojo.Setmeal">
+        <id property="id" column="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="helpCode" property="helpCode"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="price" property="price"/>
+        <result column="remark" property="remark"/>
+        <result column="attention" property="attention"/>
+        <result column="img" property="img"/>
+    </resultMap>
+    
+    <resultMap id="selectByIdResultMap" extends="baseResultMap" type="com.cyh.pojo.Setmeal">
+        <collection property="checkGroups"
+                    javaType="ArrayList"
+                    select="com.cyh.dao.CheckGroupDao.selectCheckGroupBySetmealId"
+                    column="id"
+                    ofType="com.cyh.pojo.CheckGroup">
+        </collection>
+    </resultMap>
+
+
+
+    <!--新增-->
+    <insert id="save" parameterType="com.cyh.pojo.Setmeal">
+        <selectKey order="AFTER" resultType="Integer" keyProperty="id">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into t_setmeal(code,name,gender,age,price,img,helpCode,remark,attention)
+        values
+        (#{code},#{name},#{gender},#{age},#{price},#{img},#{helpCode},#{remark},#{attention})
+    </insert>
+
+    <insert id="saveSetmealCheckGroup" parameterType="map">
+        insert into t_setmeal_checkgroup (setmeal_id, checkgroup_id)
+        values (#{setmealId}, #{checkGroupId})
+    </insert>
+
+    <select id="selectByCondition" parameterType="map" resultType="com.cyh.pojo.Setmeal">
+        select * from t_setmeal
+        <if test="queryString != null and queryString.length >0 ">
+            where code like '%${queryString}%' or name like  '%${queryString}%'
+        </if>
+    </select>
+<!--    concat('%',#{queryString},'%') or name like concat('%',#{queryString},'%')-->
+
+<!--    <select id="countBySetmealId" parameterType="int" resultType="long">-->
+<!--        select count(*) from t_setmeal_checkgroup where checkgroup_id = #{checkItemId}-->
+<!--    </select>-->
+
+<!--    <delete id="deleteById" parameterType="int">-->
+<!--        delete from t_checkgroup where id = #{id}-->
+<!--    </delete>-->
+
+<!--    <select id="selectById" parameterType="int" resultType="com.cyh.pojo.Setmeal">-->
+<!--        select * from t_setmeal where id = #{id}-->
+<!--    </select>-->
+
+    <select id="selectGroupBySetmealId" parameterType="int" resultType="Integer">
+        select checkgroup_id from t_setmeal_checkgroup
+            where setmeal_id = #{id}
+    </select>
+
+    <update id="update" parameterType="com.cyh.pojo.Setmeal">
+        update t_setmeal
+        set name = #{name},gender = #{gender},helpCode = #{helpCode},code = #{code},attention = #{attention},remark = #{remark}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSetmealCheckGroupsBySetmealId" parameterType="int">
+        delete from t_setmeal_checkgroup where setmeal_id = #{setmealId}
+    </delete>
+
+    <select id="selectAll" resultType="com.cyh.pojo.Setmeal">
+        select * from t_setmeal
+    </select>
+
+    <select id="selectById" resultMap="selectByIdResultMap">
+        select * from t_setmeal where id = #{id}
+    </select>
+
+    <select id="getSetmealCount" resultType="map" >
+        select b.name, count(a.id) as value
+        from  t_order a
+            inner join t_setmeal b
+        on a.setmeal_id = b.id
+        group by 1
+    </select>
+
+</mapper>

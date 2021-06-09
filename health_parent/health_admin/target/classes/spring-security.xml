@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/mvc
+                        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                        http://code.alibabatech.com/schema/dubbo
+                        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context.xsd
+                          http://www.springframework.org/schema/security
+                          http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <context:annotation-config></context:annotation-config>
+    <mvc:annotation-driven></mvc:annotation-driven>
+<!--    <mvc:default-servlet-handler/>-->
+    <context:component-scan base-package="com.cyh"/>
+
+
+    <security:http security="none" pattern="/css/**"/>
+    <security:http security="none" pattern="/js/**"/>
+    <security:http security="none" pattern="/img/**"/>
+    <security:http security="none" pattern="/plugins/**"/>
+<!--    <security:http security="none" pattern="/pages/**"/>-->
+    <security:http security="none" pattern="/login.html"/>
+<!--    <security:http security="none" pattern="/checkitem/*"/>-->
+
+
+    <security:http use-expressions="true" auto-config="true">
+        <security:intercept-url pattern="/pages/**" access="isAuthenticated()"/>
+        <security:headers>
+            <security:frame-options policy="SAMEORIGIN"/>
+        </security:headers>
+
+        <security:form-login
+            login-page="/login.html"
+            username-parameter="username"
+            password-parameter="password"
+            login-processing-url="/doLogin"
+            default-target-url="/pages/main.html"
+            authentication-failure-url="/login.html"
+        />
+        <!--
+          csrf：对应CsrfFilter过滤器
+          disabled：是否启用CsrfFilter过滤器，如果使用自定义登录页面需要关闭此项，否则登录操作会被禁用（403）
+        -->
+
+
+        <security:csrf disabled="true"></security:csrf>
+
+
+        <!--
+            logout：退出登录
+            logout-url：退出登录操作对应的请求路径
+            logout-success-url：退出登录后的跳转页面
+        -->
+        <security:logout logout-url="/doLogout"
+                         logout-success-url="/login.html" invalidate-session="true"/>
+
+    </security:http>
+
+
+
+
+
+
+<!--    <security:authentication-manager >-->
+<!--        <security:authentication-provider>-->
+<!--            <security:user-service>-->
+<!--                <security:user name="aa" password="{noop}aa" authorities="PERMISSION_ADD" />-->
+<!--                <security:user name="admin" password="{noop}admin" authorities="ROLE_ADMIN" />-->
+<!--                <security:user name="page" password="{noop}page" authorities="ROLE_PAGE" />-->
+<!--                <security:user name="one" password="{noop}one" authorities="ROLE_ONE" />-->
+<!--            </security:user-service>-->
+<!--        </security:authentication-provider>-->
+<!--    </security:authentication-manager>-->
+
+
+<!--    <security:authentication-manager>-->
+<!--        <security:authentication-provider user-service-ref="SpringSecurityUserServiceBean"/>-->
+<!--    </security:authentication-manager>-->
+
+
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="SpringSecurityUserService">
+            <security:password-encoder ref="passwordEncoder" />
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+<!--    <bean id="SpringSecurityUserService" class="com.cyh.security.SpringSecurityUserService"/>-->
+
+    <security:global-method-security pre-post-annotations="enabled" />
+
+
+</beans>

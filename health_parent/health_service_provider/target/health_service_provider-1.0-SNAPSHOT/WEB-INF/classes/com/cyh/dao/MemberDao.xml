@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cyh.dao.MemberDao">
+
+    <select id="selectIdByCondition" parameterType="com.cyh.pojo.Member" resultType="Integer">
+        select id from t_member
+        where phoneNumber = #{phoneNumber} and name = #{name} and idCard = #{idCard}
+    </select>
+
+    <select id="selectByTelephone" parameterType="com.cyh.pojo.Member" resultType="String">
+        select id from t_member
+        where phoneNumber = #{phoneNumber}
+    </select>
+
+    <select id="selectByTelephoneAndName" parameterType="map" resultType="com.cyh.pojo.Member">
+        select * from t_member
+        where phoneNumber = #{phoneNumber} and name = #{name}
+    </select>
+
+    <insert id="add" parameterType="com.cyh.pojo.Member" >
+        <selectKey order="AFTER" keyProperty="id" resultType="Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_member (fileNumber,name,gender,idCard,phoneNumber,regTime,password,email,birthday,remark)
+        values (#{fileNumber},#{name},#{gender},#{idCard},#{phoneNumber},#{regTime},#{password},#{email},#{birthday},#{remark})
+    </insert>
+
+    <select id="getMemberCountByMonth" resultType="Integer" parameterType="map">
+        select count(id) from  t_member where regTime between #{monthBegin} and #{monthEnd}
+    </select>
+
+    <!--根据日期统计会员数-->
+    <select id="findMemberCountByDate" parameterType="string" resultType="int">
+        select count(id) from t_member where regTime = #{value}
+    </select>
+
+    <!--根据日期统计会员数，统计指定日期之后的会员数-->
+    <select id="findMemberCountAfterDate" parameterType="string" resultType="int">
+        select count(id) from t_member where regTime &gt;= #{value}
+    </select>
+
+    <!--总会员数-->
+    <select id="findMemberTotalCount" resultType="int">
+        select count(id) from t_member
+    </select>
+</mapper>

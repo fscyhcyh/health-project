@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cyh.dao.OrderSettingDao">
+    
+    <insert id="save" parameterType="com.cyh.pojo.OrderSetting">
+        insert into t_ordersetting (orderDate, number)
+        values (#{orderDate} ,#{number})
+    </insert>
+
+    <update id="updateByOrderDate" parameterType="com.cyh.pojo.OrderSetting">
+        update t_ordersetting
+        set number = #{number}
+        where orderdate = #{orderDate}
+    </update>
+
+    <select id="countOrderSettingByOrderDate" parameterType="Date" resultType="int">
+        select count(*) from t_ordersetting where orderdate = #{orderDate}
+    </select>
+
+    <select id="selectOrderSettingByMonth" parameterType="map" resultType="com.cyh.pojo.OrderSetting">
+        select * from t_ordersetting where orderdate between #{firstDay} and #{lastDay}
+    </select>
+
+    <update id="editNumber" parameterType="map" >
+        update t_ordersetting set number = #{number} where orderDate = #{date}
+    </update>
+
+    <select id="selectByOrderDate" resultType="com.cyh.pojo.OrderSetting" parameterType="Date">
+        select * from t_ordersetting where orderdate = #{orderDate}
+    </select>
+
+    <update id="editReservationByOrderDate" parameterType="com.cyh.pojo.OrderSetting">
+        update t_ordersetting set reservations = #{reservations} where orderDate = #{orderDate}
+    </update>
+</mapper>

@@ -1,0 +1,8 @@
+{"flag":true,"message":"获取当前登录用户名称成功",
+  "data":[{"id":1,"name":"会员管理","linkUrl":null,"path":"2","priority":1,"description":null,"icon":"fa-user-md","roles":[],
+          "children":[{"id":2,"name":"会员档案","linkUrl":"member.html","path":"/2-1","priority":1,"description":null,"icon":null,"roles":[],"children":[],"parentMenuId":1},
+                      {"id":3,"name":"体检上传","linkUrl":null,"path":"/2-2","priority":2,"description":null,"icon":null,"roles":[],"children":[],"parentMenuId":1},
+                      {"id":4,"name":"会员统计","linkUrl":null,"path":"/2-3","priority":3,"description":null,"icon":null,"roles":[],"children":[],"parentMenuId":1}],"parentMenuId":null},
+    {"id":2,"name":"会员档案","linkUrl":"member.html","path":"/2-1","priority":1,"description":null,"icon":null,"roles":[],"children":[],"parentMenuId":1},
+    {"id":3,"name":"体检上传","linkUrl":null,"path":"/2-2","priority":2,"description":null,"icon":null,"roles":[],"children":[],"parentMenuId":1},
+    {"id":4,"name":"会员统计","linkUrl":null,"path":"/2-3","priority":3,"description":null,"icon":null,"roles":[],"children":[],"parentMenuId":1}]}
